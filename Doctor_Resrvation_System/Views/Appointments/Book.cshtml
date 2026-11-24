@@ -1,0 +1,65 @@
+﻿@model Doctor_Resrvation_System.Models.Appointment
+@{
+    ViewData["Title"] = "Book Appointment";
+    var docName = Model.Doctor != null ? Model.Doctor.Name : "";
+    var docSpec = Model.Doctor != null ? Model.Doctor.Specialization : "";
+}
+<div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+    <div class="page-header position-relative" style="height:350px">
+        <img class="w-100 h-100" style="object-fit:cover" src="~/images/carousel-1.jpg" alt="Image">
+        <div class="page-header-inner py-5 px-3">
+            <div class="container">
+                <h1 class="display-1 mb-4 text-white animated slideInDown">Book Appointment</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="bg-light rounded p-4 p-md-5">
+                <h4 class="mb-1">@docName</h4>
+                <p class="text-primary fw-bold mb-3">@docSpec</p>
+                <p class="mb-4">
+                    <i class="fa-solid fa-calendar-check me-2"></i>
+                    <strong>@Model.Day</strong> at <strong>@Model.Time</strong>
+                </p>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+                <form asp-controller="Appointments" asp-action="Book" method="post">
+                    <input type="hidden" name="appointmentId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" value="@ViewBag.Name" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" name="phone" class="form-control" value="@ViewBag.Phone"
+                               pattern="01[0-9]{9}" maxlength="11" inputmode="numeric"
+                               title="11 digits starting with 01" required />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">National ID</label>
+                        <input type="text" name="nationalId" class="form-control" value="@ViewBag.NationalId"
+                               pattern="[0-9]{14}" maxlength="14" inputmode="numeric"
+                               title="Exactly 14 digits" required />
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success flex-fill">Confirm</button>
+                        <a href="@Url.Action("Index", "Appointments", new { doctorId = Model.DoctorId })"
+                           class="btn btn-secondary flex-fill">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
